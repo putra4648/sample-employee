@@ -1,10 +1,10 @@
 # Description
 
-This is Springboot project to learn Database Relationship
+Springboot sample project use Spring Data JPA as ORM
 
-Sample database that used is <https://dev.mysql.com/doc/employee/en/employees-installation.html>
+Sample database <https://dev.mysql.com/doc/employee/en/employees-installation.html>
 
-To know `Database Relationship` go there :  <https://www.metabase.com/learn/databases/table-relationships>
+Database Table Relationship resource : <https://www.metabase.com/learn/databases/table-relationships>
 
 ## Feature
 
