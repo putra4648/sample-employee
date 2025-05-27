@@ -26,3 +26,4 @@ Database Table Relationship resource : <https://www.metabase.com/learn/databases
   - With limitation that data only contain 1K (as for now) from 300K data
 - [x] Add list department
 - [x] Add salary
+- [ ] Caching
