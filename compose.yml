@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_db:/data
+
+  db:
+    image: mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=employees
+    ports:
+      - 3306:3306
+    volumes:
+      - ./sample-db:/sample-db
+      - db:/var/lib/mysql
+
+volumes:
+  db:
+  redis_db:
