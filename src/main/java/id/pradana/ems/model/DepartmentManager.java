@@ -1,5 +1,7 @@
 package id.pradana.ems.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -8,10 +10,11 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.util.Date;
+import lombok.Data;
 
 @Entity
 @Table(name = "dept_manager")
+@Data
 public class DepartmentManager {
   @EmbeddedId
   private DepartmentManagerPK departmentManagerPK;
@@ -26,37 +29,6 @@ public class DepartmentManager {
 
   @OneToOne
   @JoinColumn(name = "emp_no", insertable = false, updatable = false)
-  private Departments departments;
+  private Department departments;
 
-  public DepartmentManagerPK getDepartmentManagerPK() {
-    return departmentManagerPK;
-  }
-
-  public void setDepartmentManagerPK(DepartmentManagerPK departmentManagerPK) {
-    this.departmentManagerPK = departmentManagerPK;
-  }
-
-  public Date getFromdate() {
-    return fromdate;
-  }
-
-  public void setFromdate(Date fromdate) {
-    this.fromdate = fromdate;
-  }
-
-  public Date getTodate() {
-    return todate;
-  }
-
-  public void setTodate(Date todate) {
-    this.todate = todate;
-  }
-
-  public Departments getDepartments() {
-    return departments;
-  }
-
-  public void setDepartments(Departments departments) {
-    this.departments = departments;
-  }
 }

@@ -13,7 +13,7 @@ public class Title extends BaseModel {
   private Long employeeNo;
 
   @Column(name = "title", nullable = false, length = 50)
-  private String title;
+  private String titleName;
 
   public Long getEmployeeNo() {
     return employeeNo;
@@ -23,11 +23,11 @@ public class Title extends BaseModel {
     this.employeeNo = employeeNo;
   }
 
-  public String getTitle() {
-    return title;
+  public String getTitleName() {
+    return titleName;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setTitleName(String title) {
+    this.titleName = title;
   }
 }

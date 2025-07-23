@@ -1,11 +1,10 @@
 package id.pradana.ems.repository;
 
-import id.pradana.ems.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import id.pradana.ems.model.Employee;
+
 public interface EmployeeRepository
-                                extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
+                extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 }

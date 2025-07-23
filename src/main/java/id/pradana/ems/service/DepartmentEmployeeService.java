@@ -1,11 +1,9 @@
 package id.pradana.ems.service;
 
-import id.pradana.ems.dto.DepartmentEmployeeDto;
-import id.pradana.ems.repository.DepartmentEmployeeRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import id.pradana.ems.dto.DepartmentEmployeeDto;
+import id.pradana.ems.repository.DepartmentEmployeeRepository;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class DepartmentEmployeeService {
-  @Autowired
-  private DepartmentEmployeeRepository repository;
+
+  private final DepartmentEmployeeRepository repository;
 
   public ResponseEntity<Map<String, Object>> getAll(String sortBy, String direction, int page, int size) {
-
     Map<String, Object> response = null;
     try {
       Direction dir = null;
@@ -42,12 +44,12 @@ public class DepartmentEmployeeService {
 
       Pageable paging = PageRequest.of(page, size, Sort.by(dir, sort));
 
-      Page<DepartmentEmployeeDto> pageDeptEmp = repository.findAll(paging).map((deptEmp) -> {
+      Page<DepartmentEmployeeDto> pageDeptEmp = repository.findAll(paging).map(deptEmp -> {
         DepartmentEmployeeDto dto = new DepartmentEmployeeDto();
         dto.setEmployeeNo(deptEmp.getDepartmentEmployeePk().getEmpNo());
         dto.setDepartmentNo(deptEmp.getDepartmentEmployeePk().getDeptNo());
-        dto.setFromDate(deptEmp.getFromDate().getTime());
-        dto.setToDate(deptEmp.getToDate().getTime());
+        dto.setFromDate(deptEmp.getFromDate());
+        dto.setToDate(deptEmp.getToDate());
         return dto;
       });
 

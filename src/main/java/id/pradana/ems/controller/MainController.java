@@ -1,14 +1,11 @@
 package id.pradana.ems.controller;
 
-import id.pradana.ems.filter.EmployeeFilterDTO;
-import id.pradana.ems.service.EmployeeService;
-import id.pradana.ems.view.ExportExcelView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,27 +14,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import id.pradana.ems.filter.EmployeeFilterDTO;
+import id.pradana.ems.service.EmployeeService;
+import id.pradana.ems.view.ExportExcelView;
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class MainController {
-  @Autowired
-  private EmployeeService employeeService;
+  private final EmployeeService employeeService;
 
   @GetMapping("/")
-  public ModelAndView main(ModelMap model) {
+  public String main(ModelMap model) {
     model.put("limit_export", 1000);
-    return new ModelAndView("index", model);
+    return "index";
   }
 
   @GetMapping("/detail")
-  public ModelAndView detailPage(@RequestParam(name = "id") String id,
+  public String detailPage(@RequestParam(name = "id") String id,
       ModelMap model) {
 
     ResponseEntity<Map<String, Object>> response = employeeService.getEmployeeById(Long.valueOf(id));
     if (response.getStatusCode() == HttpStatus.OK) {
-      System.out.print(response.getBody().get("data"));
       model.put("emp", response.getBody().get("data"));
     }
-    return new ModelAndView("detail", model);
+    return "detail";
   }
 
   @GetMapping("/export")

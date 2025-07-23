@@ -1,21 +1,12 @@
 package id.pradana.ems.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import id.pradana.ems.dto.EmployeeDto;
-import id.pradana.ems.dto.SalaryDto;
-import id.pradana.ems.dto.TitleDto;
-import id.pradana.ems.filter.EmployeeFilterDTO;
-import id.pradana.ems.filter.EmployeeSpecFilter;
-import id.pradana.ems.model.Employee;
-import id.pradana.ems.repository.DepartmentManagerRepository;
-import id.pradana.ems.repository.EmployeeRepository;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +17,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import id.pradana.ems.dto.EmployeeDto;
+import id.pradana.ems.dto.SalaryDto;
+import id.pradana.ems.dto.TitleDto;
+import id.pradana.ems.filter.EmployeeFilterDTO;
+import id.pradana.ems.filter.EmployeeSpecFilter;
+import id.pradana.ems.model.Employee;
+import id.pradana.ems.repository.DepartmentManagerRepository;
+import id.pradana.ems.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class EmployeeService {
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
-
-  @Autowired
-  private DepartmentManagerRepository departmentManagerRepository;
+  private final EmployeeRepository employeeRepository;
+  private final DepartmentManagerRepository departmentManagerRepository;
 
   /**
    * Get all employee with advanced filter, paging and sorting
@@ -97,57 +98,13 @@ public class EmployeeService {
 
       specFilter = EmployeeSpecFilter.filterAll(filter);
 
-      List<EmployeeDto> results = employeeRepository.findAll(specFilter, PageRequest.ofSize(1000))
+      return employeeRepository.findAll(specFilter, PageRequest.ofSize(1000))
           .stream()
-          .map(new Function<Employee, EmployeeDto>() {
-            @Override
-            public EmployeeDto apply(Employee emp) {
-              EmployeeDto dto = new EmployeeDto();
-              // Set title
-              List<TitleDto> titleDtos = emp.getTitles()
-                  .stream()
-                  .map(t -> {
-                    TitleDto titleDto = new TitleDto();
-                    titleDto.setEmployeeNo(t.getEmployeeNo());
-                    titleDto.setTitle(t.getTitle());
-                    titleDto.setFromDate(t.getFromDate().getTime());
-                    titleDto.setToDate(t.getToDate().getTime());
-                    return titleDto;
-                  })
-                  .toList();
-
-              dto.setTitles(titleDtos);
-
-              // Set employee
-              dto.setId(emp.getId().longValue());
-              dto.setFirstname(emp.getFirstname());
-              dto.setLastname(emp.getLastname());
-              dto.setFullname(emp.getFullname());
-              dto.setBirthdate(emp.getBirthdate().getTime());
-              dto.setHiredate(emp.getHiredate().getTime());
-
-              // Set salaries
-              List<SalaryDto> salariesDto = emp.getSalaries()
-                  .stream()
-                  .map(sal -> {
-                    SalaryDto salaryDto = new SalaryDto();
-                    salaryDto.setEmpNo(sal.getEmpNo());
-                    salaryDto.setSalary(sal.getSalary());
-                    salaryDto.setFromDate(sal.getFromDate().getTime());
-                    salaryDto.setToDate(sal.getToDate().getTime());
-                    return salaryDto;
-                  })
-                  .toList();
-              dto.setSalaries(salariesDto);
-
-              return dto;
-            }
-          })
+          .map(this::convertToDto)
           .toList();
 
-      return results;
     } catch (Exception e) {
-      return null;
+      return Collections.emptyList();
     }
   }
 
@@ -163,43 +120,9 @@ public class EmployeeService {
     try {
       if (emp.isPresent()) {
         response = new HashMap<>();
-        Employee ep = emp.get();
-
-        EmployeeDto dto = new EmployeeDto();
-
-        dto.setId(ep.getId().longValue());
-        dto.setFirstname(ep.getFirstname());
-        dto.setLastname(ep.getLastname());
-        dto.setFullname(ep.getFullname());
-        dto.setHiredate(ep.getHiredate().getTime());
-        dto.setBirthdate(ep.getBirthdate().getTime());
-
-        List<TitleDto> titles = ep.getTitles()
-            .stream()
-            .map(d -> {
-              TitleDto titleDto = new TitleDto();
-              titleDto.setEmployeeNo(d.getEmployeeNo());
-              titleDto.setTitle(d.getTitle());
-              titleDto.setFromDate(d.getFromDate().getTime());
-              titleDto.setToDate(d.getToDate().getTime());
-              return titleDto;
-            })
-            .toList();
-
-        List<SalaryDto> salaries = ep.getSalaries()
-            .stream()
-            .map(d -> {
-              SalaryDto salaryDto = new SalaryDto();
-              salaryDto.setSalary(d.getSalary());
-              return salaryDto;
-            })
-            .toList();
-
-        dto.setTitles(titles);
-        dto.setSalaries(salaries);
 
         response.put("errorMessage", null);
-        response.put("data", dto);
+        response.put("data", this.convertToDto(emp.get()));
         return new ResponseEntity<>(new TreeMap<>(response), HttpStatus.OK);
       } else {
         response = new HashMap<>();
@@ -218,49 +141,56 @@ public class EmployeeService {
   private Page<EmployeeDto> getPageEmployee(Specification<Employee> filter,
       Pageable paging) {
     return employeeRepository.findAll(filter, paging)
-        .map(new Function<Employee, EmployeeDto>() {
-          @Override
-          public EmployeeDto apply(Employee emp) {
-            EmployeeDto dto = new EmployeeDto();
-            // Set title
-            List<TitleDto> titleDtos = emp.getTitles()
-                .stream()
-                .map(t -> {
-                  TitleDto titleDto = new TitleDto();
-                  titleDto.setEmployeeNo(t.getEmployeeNo());
-                  titleDto.setTitle(t.getTitle());
-                  titleDto.setFromDate(t.getFromDate().getTime());
-                  titleDto.setToDate(t.getToDate().getTime());
-                  return titleDto;
-                })
-                .toList();
+        .map(this::convertToDto);
+  }
 
-            dto.setTitles(titleDtos);
+  private EmployeeDto convertToDto(Employee emp) {
+    EmployeeDto dto = new EmployeeDto();
 
-            // Set employee
-            dto.setId(emp.getId().longValue());
-            dto.setFirstname(emp.getFirstname());
-            dto.setLastname(emp.getLastname());
-            dto.setFullname(emp.getFullname());
-            dto.setBirthdate(emp.getBirthdate().getTime());
-            dto.setHiredate(emp.getHiredate().getTime());
+    // Set employee
+    dto.setId(emp.getId());
+    dto.setFirstname(emp.getFirstname());
+    dto.setLastname(emp.getLastname());
+    dto.setFullname(emp.getFullname());
+    dto.setBirthdate(emp.getBirthdate());
+    dto.setHiredate(emp.getHiredate());
+    dto.setGender(emp.getGender().name());
 
-            // Set salaries
-            List<SalaryDto> salariesDto = emp.getSalaries()
-                .stream()
-                .map(sal -> {
-                  SalaryDto salaryDto = new SalaryDto();
-                  salaryDto.setEmpNo(sal.getEmpNo());
-                  salaryDto.setSalary(sal.getSalary());
-                  salaryDto.setFromDate(sal.getFromDate().getTime());
-                  salaryDto.setToDate(sal.getToDate().getTime());
-                  return salaryDto;
-                })
-                .toList();
-            dto.setSalaries(salariesDto);
+    // Set salaries
+    List<SalaryDto> salariesDto = emp.getSalaries()
+        .stream()
+        .map(sal -> {
+          SalaryDto salaryDto = new SalaryDto();
+          salaryDto.setEmpNo(sal.getEmpNo());
+          salaryDto.setSalary(sal.getSalary());
+          salaryDto.setFromDate(sal.getFromDate().getTime());
+          salaryDto.setToDate(sal.getToDate().getTime());
+          return salaryDto;
+        })
+        .toList();
+    dto.setSalaries(salariesDto);
 
-            return dto;
-          }
-        });
+    // Set title
+    List<TitleDto> titleDtos = emp.getTitles()
+        .stream()
+        .map(t -> {
+          TitleDto titleDto = new TitleDto();
+          titleDto.setEmployeeNo(t.getEmployeeNo());
+          titleDto.setTitle(t.getTitleName());
+          titleDto.setFromDate(t.getFromDate().getTime());
+          titleDto.setToDate(t.getToDate().getTime());
+          return titleDto;
+        })
+        .toList();
+
+    dto.setTitles(titleDtos);
+
+    // Set departments
+    dto.setDepartments(emp.getDepartments()
+        .stream()
+        .map(deptEmp -> deptEmp.getDepartmentEmployeePk().getDeptNo())
+        .toList());
+
+    return dto;
   }
 }

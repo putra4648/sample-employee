@@ -4,9 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Table(name = "salaries")
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Salary extends BaseModel {
   @Id
   @Column(name = "emp_no")
@@ -15,19 +19,4 @@ public class Salary extends BaseModel {
   @Column(name = "salary")
   private Long salary;
 
-  public Long getEmpNo() {
-    return empNo;
-  }
-
-  public void setEmpNo(Long empNo) {
-    this.empNo = empNo;
-  }
-
-  public Long getSalary() {
-    return salary;
-  }
-
-  public void setSalary(Long salary) {
-    this.salary = salary;
-  }
 }

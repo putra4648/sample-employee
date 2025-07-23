@@ -1,29 +1,18 @@
 package id.pradana.ems.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Data;
 
 @Embeddable
-public class DepartmentManagerPK {
+@Data
+public class DepartmentManagerPK implements Serializable {
   @Column(name = "emp_no", nullable = false)
   private Integer empno;
 
   @Column(name = "dept_no", nullable = false)
   private String deptno;
 
-  public Integer getEmpno() {
-    return empno;
-  }
-
-  public void setEmpno(Integer emp_no) {
-    this.empno = emp_no;
-  }
-
-  public String getDeptno() {
-    return deptno;
-  }
-
-  public void setDeptno(String dept_no) {
-    this.deptno = dept_no;
-  }
 }

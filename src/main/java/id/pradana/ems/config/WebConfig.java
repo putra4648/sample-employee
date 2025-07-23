@@ -1,6 +1,7 @@
 package id.pradana.ems.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
       "classpath:/static/", "classpath:/public/" };
 
   @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+  public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**").addResourceLocations(
         CLASSPATH_RESOURCE_LOCATIONS);
     registry.addResourceHandler("/webjars/**")
