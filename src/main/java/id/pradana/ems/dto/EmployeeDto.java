@@ -1,17 +1,26 @@
 package id.pradana.ems.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Data
-public class EmployeeDto {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class EmployeeDto implements Serializable {
   private Long id;
   private String firstname;
   private String lastname;
   private String fullname;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date birthdate;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date hiredate;
   private String gender;
   private String deptname;

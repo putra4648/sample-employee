@@ -13,13 +13,13 @@ public class EmployeeSpecFilter {
                 // private constructor to prevent instantiation
         }
 
-        public static Specification<Employee> filterAll(EmployeeFilterDTO filter) {
-                return (root, cr, cb) -> {
-                        String birthdate = filter.getBirthdate() == null
+        public static Specification<Employee> filterAll(SearchFilter filter) {
+                return (root, _, cb) -> {
+                        String birthdate = filter.getBirthdate().isEmpty()
                                         ? ""
                                         : new SimpleDateFormat("dd-MM-yyyy")
                                                         .format(filter.getBirthdate());
-                        String hiredate = filter.getHiredate() == null
+                        String hiredate = filter.getHiredate().isEmpty()
                                         ? ""
                                         : new SimpleDateFormat("dd-MM-yyyy")
                                                         .format(filter.getHiredate());

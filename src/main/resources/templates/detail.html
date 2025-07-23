@@ -1,123 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Detail Employee</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <title>Detail Employee</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link
+      th:rel="stylesheet"
+      th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+    />
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
-  <!-- Bootstrap -->
-  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- Font Awesome -->
+    <link
+      th:rel="stylesheet"
+      th:href="@{/webjars/font-awesome/css/all.min.css}"
+    />
 
-  <!-- Font Awesome -->
-  <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+    <!-- jQuery -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  </head>
 
-  <!-- jQuery -->
-  <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-</head>
-
-<body>
-  <div class="container">
-    <a th:href="@{/}" class="btn btn-primary">
-      <i class="fas fa-arrow-left"></i>
-    </a>
-    <div class="card p-3">
-      <div class="row">
-        <div class="col-4">
-          <div class="row g-3">
-            <div class="col-12">
-              <div class="card">
-                <img class="img-fluid" src="https://picsum.photos/300" alt="">
-                <div class="card-body">
-                  <h5 class="card-title">Personal Information</h5>
-                  <table class="table table-borderless">
-                    <tbody>
-                      <tr>
-                        <th scope="row">Fullname</th>
-                        <td>:</td>
-                        <td th:text="${emp.fullname}"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Birthdate</th>
-                        <td>:</td>
-                        <td th:text="${#dates.format(emp.birthdate, 'dd-MMM-yyyy')}"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Gender</th>
-                        <td>:</td>
-                        <td th:text="${emp.gender}"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Joined Date</th>
-                        <td>:</td>
-                        <td th:text="${#dates.format(emp.hiredate, 'dd-MMM-yyyy')}"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="row g-3">
-            <div class="col-12">
-              <div class="card p-2">
-                <h5 class="card-header">
-                  Information
-                </h5>
-                <div class="card-body">
-                  <p class="card-text">
-                  <table class="table table-borderless">
-                    <tbody>
-                      <tr>
-                        <th scope="row">Salaries</th>
-                        <th>:</th>
-                        <th th:each="salary : ${emp.salaries}">
-                          <p th:text="${#numbers.formatCurrency(salary.salary)}"></p>
-                        </th>
-                      </tr>
-                      <tr>
-                        <th scope="row">Department ID</th>
-                        <th>:</th>
-                        <th th:text="${#strings.listJoin(emp.departments, ',')}"></th>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="card p-2">
-                <h5 class="card-header">
-                  Titles
-                </h5>
-                <div class="card-body">
-                  <p class="card-text">
-                  <div th:each="title : ${emp.titles}">
-                    <p th:text="${title.title}"></p>
+  <body>
+    <div class="container">
+      <div class="my-2">
+        <a th:href="@{/}" class="btn btn-primary">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+      <div class="card p-3">
+        <div class="row">
+          <div class="col-4">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Personal Information</h5>
+                    <table class="table table-borderless">
+                      <tbody>
+                        <tr>
+                          <th scope="row">Fullname</th>
+                          <td>:</td>
+                          <td th:text="${emp.fullname}"></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Birthdate</th>
+                          <td>:</td>
+                          <td
+                            th:text="${#dates.format(emp.birthdate, 'dd-MMM-yyyy')}"
+                          ></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Gender</th>
+                          <td>:</td>
+                          <td th:text="${emp.gender}"></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Joined Date</th>
+                          <td>:</td>
+                          <td
+                            th:text="${#dates.format(emp.hiredate, 'dd-MMM-yyyy')}"
+                          ></td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  </p>
                 </div>
               </div>
-
-
             </div>
-
           </div>
-
+          <div class="col">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="card p-2">
+                  <h5 class="card-header">Information</h5>
+                  <div class="card-body">
+                    <p class="card-text"></p>
+                    <table class="table table-borderless">
+                      <tbody>
+                        <tr>
+                          <th scope="row">Salaries</th>
+                          <th>:</th>
+                          <th th:each="salary : ${emp.salaries}">
+                            <p
+                              th:text="${#numbers.formatCurrency(salary.salary)}"
+                            ></p>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th scope="row">Department ID</th>
+                          <th>:</th>
+                          <th
+                            th:text="${#strings.listJoin(emp.departments, ',')}"
+                          ></th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card p-2">
+                  <h5 class="card-header">Titles</h5>
+                  <div class="card-body">
+                    <p class="card-text"></p>
+                    <div th:each="title : ${emp.titles}">
+                      <p th:text="${title.title}"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <script>
-    $(document).ready(function () {
-      console.log("Detail ready")
-    })
-  </script>
-</body>
-
+  </body>
 </html>

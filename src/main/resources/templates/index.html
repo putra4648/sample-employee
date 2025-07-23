@@ -23,13 +23,11 @@
 
     <!-- Datatables -->
     <link
-      th:rel="stylesheet"
-      th:href="@{/webjars/datatables.net-bs5/css/dataTables.bootstrap5.min.css}"
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css"
     />
-    <script th:src="@{/webjars/datatables.net/js/dataTables.min.js}"></script>
-    <script
-      th:src="@{/webjars/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"
-    ></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
 
     <!--Moment JS-->
     <script th:src="@{/webjars/moment/min/moment.min.js}"></script>
@@ -55,112 +53,87 @@
   <body>
     <div class="container">
       <div class="border my-2 p-3">
-        <div id="searchForm" class="row gap-2">
-          <div class="collapse" id="searchCollapse">
-            <div class="row">
-              <div class="col">
-                <label for="employee_id" class="form-label">ID</label>
-                <input type="text" name="employee_id" class="form-control" />
-              </div>
-              <div class="col">
-                <label for="employee_fullname" class="form-label"
-                  >Fullname</label
-                >
-                <input
-                  type="text"
-                  name="employee_fullname"
-                  class="form-control"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <label for="employee_birthdate" class="form-label"
-                  >Birthday Date</label
-                >
-                <div class="input-group date" id="employee_birthdate">
-                  <input
-                    type="text"
-                    name="employee_birthdate"
-                    class="form-control datetimepicker-input"
-                  />
-                  <div class="input-group-text">
-                    <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                  </div>
+        <form action="#" th:object="${searchEmployee}" th:action="@{/}">
+          <div class="row gap-2">
+            <div>
+              <div class="row">
+                <div class="col">
+                  <label for="id" class="form-label">ID</label>
+                  <input type="text" th:field="*{id}" class="form-control" />
                 </div>
-              </div>
-              <div class="col">
-                <label for="employee_hiredate" class="form-label"
-                  >Hire Date</label
-                >
-                <div class="input-group date" id="employee_hiredate">
+                <div class="col">
+                  <label for="fullname" class="form-label">Fullname</label>
                   <input
                     type="text"
-                    name="employee_hiredate"
+                    th:field="*{fullname}"
                     class="form-control"
                   />
-                  <div class="input-group-text">
-                    <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="birthdate" class="form-label"
+                    >Birthday Date</label
+                  >
+                  <div class="input-group date">
+                    <input
+                      type="text"
+                      th:field="*{birthdate}"
+                      class="form-control datetimepicker-input"
+                    />
+                    <div class="input-group-text">
+                      <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <label for="hiredate" class="form-label">Hire Date</label>
+                  <div class="input-group date">
+                    <input
+                      type="text"
+                      th:field="*{hiredate}"
+                      class="form-control"
+                    />
+                    <div class="input-group-text">
+                      <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row align-items-center">
-            <div class="col-11">
-              <button
-                id="searchBtn"
-                onclick="searchEmployee()"
-                type="submit"
-                class="btn btn-primary"
-              >
-                <span>
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                Search
-              </button>
-              <button
-                id="resetBtn"
-                onclick="resetEmployee()"
-                type="reset"
-                class="btn btn-danger"
-              >
-                <span>
-                  <i class="fa-solid fa-arrows-rotate"></i>
-                </span>
-                Reset
-              </button>
-              <button
-                id="resetBtn"
-                onclick="exportExcel()"
-                type="reset"
-                class="btn btn-primary"
-              >
-                <span>
-                  <i class="fa-regular fa-file-excel"></i>
-                </span>
-                Export Excel
-              </button>
-            </div>
-            <div class="col">
-              <button
-                type="button"
-                class="btn btn-lg"
-                id="collapseBtn"
-                onclick="showCollapse()"
-              >
-                <span>
-                  <i class="fa-solid fa-arrow-down"></i>
-                </span>
-              </button>
-            </div>
-            <div>
-              <small
-                th:text="'* Export Excel has been limited to ' + ${limit_export} + ' data. For now.'"
-              ></small>
+            <div class="row align-items-center">
+              <div class="col-11">
+                <button type="submit" class="btn btn-primary">
+                  <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </span>
+                  Search
+                </button>
+                <button type="reset" class="btn btn-danger">
+                  <span>
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                  </span>
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
+        <form
+          class="mt-2"
+          action="#"
+          th:object="${export}"
+          th:action="@{/export}"
+        >
+          <button type="submit" class="btn btn-primary">
+            <span>
+              <i class="fa-regular fa-file-excel"></i>
+            </span>
+            Export Excel
+          </button>
+          <input type="text" th:field="*{limit}" />
+        </form>
+        <small>* Data in table is allowed for 100 for now</small>
       </div>
       <table id="employeeTable" class="display" style="width: 100%">
         <thead>
@@ -175,68 +148,69 @@
       </table>
     </div>
 
-    <script>
+    <script th:inline="javascript">
       // ===============
       // Variables
       // ===============
 
-      let searchCollapse = new bootstrap.Collapse("#searchCollapse", {
-        toggle: false,
+      const EmployeeTable = new DataTable("#employeeTable", {
+        responsive: true,
+        data: /*[[${employees}]]*/ [],
+        processing: true,
+        paging: true,
+        searching: false,
+        columns: [
+          {
+            data: "id",
+          },
+          {
+            data: "fullname",
+          },
+          {
+            data: "birthdate",
+            render: function (data) {
+              return data;
+            },
+          },
+          {
+            data: "hiredate",
+            render: function (data) {
+              return data;
+            },
+          },
+          {
+            data: null,
+          },
+        ],
+        columnDefs: [
+          {
+            targets: 4,
+            sortable: false,
+            render: function (data, type, row, meta) {
+              return `<a href='/detail/${data.id}' class='btn btn-primary'>
+<i class="fa-solid fa-circle-info"></i>
+Detail
+</a>`;
+            },
+          },
+        ],
+        dom: "<'float-end'l>" + "rtip",
       });
 
       $(document).ready(function () {
         tempusDominus.extend(tempusDominus.plugins.moment_parse, "DD-MMM-yyyy");
-        initDate("employee_birthdate");
-        initDate("employee_hiredate");
+        initDate("birthdate");
+        initDate("hiredate");
         $(document).find("input").val("");
-        searchCollapse = new bootstrap.Collapse("#searchCollapse", {
-          toggle: false,
-        });
-        searchCollapse.show();
       });
 
       // ===============
       // Listener
       // ===============
 
-      $("#searchCollapse").on("shown.bs.collapse", function () {
-        $("#collapseBtn")
-          .find("span")
-          .html(`<i class='fa-solid fa-arrow-up'></i>`);
-        $("#collapseBtn").click(function () {
-          searchCollapse.hide();
-        });
-      });
-
-      $("#searchCollapse").on("hidden.bs.collapse", function () {
-        $("#collapseBtn")
-          .find("span")
-          .html(`<i class='fa-solid fa-arrow-down'></i>`);
-        $("#collapseBtn").click(function () {
-          searchCollapse.show();
-        });
-      });
-
       // ===============
       // Functions
       // ===============
-
-      function showCollapse() {
-        searchCollapse.show();
-      }
-
-      function resetAllFilter() {
-        $("#searchForm").find("input").val("");
-      }
-
-      function resetEmployee() {
-        resetAllFilter();
-        EmployeeTable.clear().draw();
-      }
-
-      function searchEmployee() {
-        EmployeeTable.ajax.reload();
-      }
 
       function initDate(elementId = "") {
         new tempusDominus.TempusDominus(document.getElementById(elementId), {
@@ -257,19 +231,8 @@
           viewDate: new Date(),
         });
       }
-
-      function exportExcel() {
-        const filterEmployeeParams = {
-          employee_id: $("input[name='employee_id']").val(),
-          employee_fullname: $("input[name='employee_fullname']").val(),
-          employee_birthdate: $("input[name='employee_birthdate']").val(),
-          employee_hiredate: $("input[name='employee_hiredate']").val(),
-        };
-        const url = "/export?" + $.param(filterEmployeeParams);
-        window.open(url);
-      }
     </script>
-    <script type="text/javascript" th:src="@{/js/employee.table.js}"></script>
+
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
   </body>
 </html>
